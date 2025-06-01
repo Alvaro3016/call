@@ -70,7 +70,7 @@ onAuthStateChanged(auth, (user) => {
 
 // Importa Daily.co (asegúrate de que esta URL sea la más reciente si Daily.co la actualiza)
 // También puedes usar: <script src="https://unpkg.com/@daily-co/daily-js"></script> en tu HTML
-import DailyIframe from "https://unpkg.com/@daily-co/daily-js";
+import * as DailyIframe from "https://unpkg.com/@daily-co/daily-js";
 
 // Referencias a elementos del DOM para llamadas
 const startCallButton = document.getElementById('start-call-button');
