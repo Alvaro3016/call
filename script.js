@@ -65,7 +65,7 @@ logoutButton.addEventListener('click', async () => {
 startCallButton.addEventListener('click', () => {
     // Asegúrate de que no haya una llamada activa y que DailyIframe esté disponible
     if (!callFrame && typeof DailyIframe !== 'undefined') {
-        callFrame = DailyIframe.createFrame({ // <--- CORRECCIÓN CLAVE AQUÍ: PASAR UN OBJETO
+        callFrame = DailyIframe.createFrame(callContainer, { // <--- ¡CAMBIO AQUÍ!
             iframeStyle: {
                 position: 'absolute',
                 top: 0,
@@ -75,9 +75,23 @@ startCallButton.addEventListener('click', () => {
                 border: '0',
                 zIndex: 9999
             },
-            frameParent: callContainer, // <--- PROPIEDAD CORRECTA PARA EL CONTENEDOR
+            // ELIMINA LA LÍNEA 'frameParent' O 'parent' DE DENTRO DE ESTE OBJETO
             showLeaveButton: false 
         });
+
+        // Asegúrate de que la URL de la sala se pasa en el método .join() UNA SOLA VEZ
+        callFrame.join({
+            url: DAILY_ROOM_URL, 
+            userName: auth.currentUser ? auth.currentUser.email : 'Usuario Anónimo'
+        });
+
+        startCallButton.style.display = 'none';
+        leaveCallButton.style.display = 'block';
+        callContainer.innerHTML = ''; // Limpia el mensaje "Aquí Daily.co..."
+    } else if (typeof DailyIframe === 'undefined') {
+        console.error("Error: DailyIframe no está cargado. ¿Verificaste la línea en index.html?");
+    }
+});
 
         // Asegúrate de que la URL de la sala se pasa en el método .join() UNA SOLA VEZ
         callFrame.join({
