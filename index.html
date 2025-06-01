@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Plataforma de Llamadas Privadas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Bienvenido a tu Plataforma de Llamadas</h1>
+    </header>
+
+    <main>
+        <section id="login-section">
+            <h2>Iniciar Sesión</h2>
+            <input type="text" id="email" placeholder="Tu Email/Usuario">
+            <input type="password" id="password" placeholder="Tu Contraseña">
+            <button id="login-button">Entrar</button>
+            <p id="error-message" style="color: red;"></p>
+        </section>
+
+        <section id="call-section" style="display: none;">
+            <h2>Videollamada</h2>
+            <div id="call-container">
+                </div>
+            <button id="start-call-button">Iniciar Llamada</button>
+            <button id="leave-call-button" style="display: none;">Colgar</button>
+            <button id="logout-button">Salir</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Mi Plataforma Privada</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
