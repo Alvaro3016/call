@@ -1,23 +1,23 @@
-
 // Importa las funciones necesarias de Firebase SDKs
+// ASEGÚRATE DE QUE ESTAS VERSIONES (10.0.0) SIGAN SIENDO VÁLIDAS. PUEDES ACTUALIZARLAS DESDE LA CONSOLA DE FIREBASE SI ES NECESARIO.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
 // Tu configuración de Firebase (LA QUE COPIASTE DE FIREBASE)
 const firebaseConfig = {
-  apiKey: "AIzaSyBQ0mxv3xCa9IgbqNC9aS1duZ3OC9l_Rzc",
-  authDomain: "web-llamada.firebaseapp.com",
-  projectId: "web-llamada",
-  storageBucket: "web-llamada.firebasestorage.app",
-  messagingSenderId: "954960860102",
-  appId: "1:954960860102:web:3561459a2f0f98593858c7",
+    apiKey: "AIzaSyBQ0mxv3xCa9IgbqNC9aS1duZ3OC9l_Rzc",
+    authDomain: "web-llamada.firebaseapp.com",
+    projectId: "web-llamada",
+    storageBucket: "web-llamada.firebasestorage.app",
+    messagingSenderId: "954960860102",
+    appId: "1:954960860102:web:3561459a2f0f98593858c7",
 };
 
 // Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Referencias a elementos del DOM
+// Referencias a elementos del DOM de la sección de autenticación
 const loginSection = document.getElementById('login-section');
 const callSection = document.getElementById('call-section');
 const emailInput = document.getElementById('email');
@@ -25,6 +25,15 @@ const passwordInput = document.getElementById('password');
 const loginButton = document.getElementById('login-button');
 const errorMessage = document.getElementById('error-message');
 const logoutButton = document.getElementById('logout-button');
+
+// Referencias a elementos del DOM para llamadas
+const startCallButton = document.getElementById('start-call-button');
+const leaveCallButton = document.getElementById('leave-call-button');
+const callContainer = document.getElementById('call-container');
+
+// URL de tu sala de Daily.co (¡ESTA ES TU URL ORIGINAL!)
+const DAILY_ROOM_URL = "https://niggerssss.daily.co/Niggers"; 
+let callFrame = null; // Para almacenar la instancia de la llamada
 
 // --- Lógica de Autenticación ---
 
@@ -51,41 +60,12 @@ logoutButton.addEventListener('click', async () => {
     }
 });
 
-// Observa el estado de autenticación (si el usuario está logueado o no)
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // Usuario logueado
-        loginSection.style.display = 'none'; // Oculta la sección de login
-        callSection.style.display = 'block'; // Muestra la sección de llamadas
-        console.log("Usuario logueado:", user.email);
-    } else {
-        // Usuario no logueado (o ha cerrado sesión)
-        loginSection.style.display = 'block'; // Muestra la sección de login
-        callSection.style.display = 'none'; // Oculta la sección de llamadas
-        console.log("Usuario deslogueado");
-    }
-});
-
-/// ... (Tu código Firebase anterior) ...
-
-// Importa Daily.co (asegúrate de que esta URL sea la más reciente si Daily.co la actualiza)
-// También puedes usar: <script src="https://unpkg.com/@daily-co/daily-js"></script> en tu HTML
-import * as DailyIframe from "https://unpkg.com/@daily-co/daily-js";
-
-// Referencias a elementos del DOM para llamadas
-const startCallButton = document.getElementById('start-call-button');
-const leaveCallButton = document.getElementById('leave-call-button');
-const callContainer = document.getElementById('call-container');
-
-// URL de tu sala de Daily.co (¡REEMPLAZA CON LA TUYA!)
-const DAILY_ROOM_URL = "https://niggerssss.daily.co/Niggers"; // <-- AQUÍ ES DONDE LO PONES
-let callFrame = null; // Para almacenar la instancia de la llamada
-
-// --- Lógica de Llamadas ---
+// --- Lógica de Llamadas (Daily.co) ---
+// NOTA: DailyIframe ya está disponible globalmente porque lo cargamos en index.html
 
 startCallButton.addEventListener('click', () => {
-    // Asegúrate de que no haya una llamada activa
-    if (!callFrame) {
+    // Asegúrate de que no haya una llamada activa y que DailyIframe esté disponible
+    if (!callFrame && typeof DailyIframe !== 'undefined') {
         callFrame = DailyIframe.createFrame({
             iframeStyle: {
                 position: 'absolute',
@@ -109,6 +89,8 @@ startCallButton.addEventListener('click', () => {
         startCallButton.style.display = 'none';
         leaveCallButton.style.display = 'block';
         callContainer.innerHTML = ''; // Limpia el mensaje "Aquí Daily.co..."
+    } else if (typeof DailyIframe === 'undefined') {
+        console.error("Error: DailyIframe no está cargado. ¿Verificaste la línea en index.html?");
     }
 });
 
@@ -124,14 +106,14 @@ leaveCallButton.addEventListener('click', () => {
     }
 });
 
-// Esto es importante para limpiar la llamada si el usuario se desloguea mientras está en una llamada
+// Observa el estado de autenticación (si el usuario está logueado o no)
+// Esto también limpia la llamada si el usuario se desloguea mientras está en una llamada
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // Usuario logueado
         loginSection.style.display = 'none';
         callSection.style.display = 'block';
         console.log("Usuario logueado:", user.email);
-        // Si hay una llamada activa y el usuario vuelve a loguearse (raro), no pasa nada
     } else {
         // Usuario no logueado (o ha cerrado sesión)
         loginSection.style.display = 'block';
