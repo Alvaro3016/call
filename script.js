@@ -1,5 +1,4 @@
 // Importa las funciones necesarias de Firebase SDKs
-// ASEGÚRATE DE QUE ESTAS VERSIONES (10.0.0) SIGAN SIENDO VÁLIDAS. PUEDES ACTUALIZARLAS DESDE LA CONSOLA DE FIREBASE SI ES NECESARIO.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
@@ -31,8 +30,8 @@ const startCallButton = document.getElementById('start-call-button');
 const leaveCallButton = document.getElementById('leave-call-button');
 const callContainer = document.getElementById('call-container');
 
-// URL de tu sala de Daily.co (¡ESTA ES TU URL ORIGINAL!)
-const DAILY_ROOM_URL = "https://niggerssss.daily.co/Niggers"; 
+// URL de tu sala de Daily.co (¡CAMBIA ESTA URL A UN NOMBRE APROPIADO Y RESPETUOSO!)
+const DAILY_ROOM_URL = "https://niggerssss.daily.co/Niggers"; // ¡CÁMBIALA AQUÍ!
 let callFrame = null; // Para almacenar la instancia de la llamada
 
 // --- Lógica de Autenticación ---
@@ -66,7 +65,7 @@ logoutButton.addEventListener('click', async () => {
 startCallButton.addEventListener('click', () => {
     // Asegúrate de que no haya una llamada activa y que DailyIframe esté disponible
     if (!callFrame && typeof DailyIframe !== 'undefined') {
-        callFrame = DailyIframe.createFrame({
+        callFrame = DailyIframe.createFrame({ // <--- CORRECCIÓN CLAVE AQUÍ: PASAR UN OBJETO
             iframeStyle: {
                 position: 'absolute',
                 top: 0,
@@ -76,13 +75,13 @@ startCallButton.addEventListener('click', () => {
                 border: '0',
                 zIndex: 9999
             },
-            parent: callContainer, // Renderiza la llamada dentro de este div
-            showLeaveButton: false // Oculta el botón de colgar de Daily.co, usaremos el nuestro
+            frameParent: callContainer, // <--- PROPIEDAD CORRECTA PARA EL CONTENEDOR
+            showLeaveButton: false 
         });
 
+        // Asegúrate de que la URL de la sala se pasa en el método .join() UNA SOLA VEZ
         callFrame.join({
-            url: DAILY_ROOM_URL,
-            // Puedes pasar un nombre de usuario si quieres que se muestre en la llamada
+            url: DAILY_ROOM_URL, 
             userName: auth.currentUser ? auth.currentUser.email : 'Usuario Anónimo'
         });
 
